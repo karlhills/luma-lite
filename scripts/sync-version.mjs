@@ -1,9 +1,12 @@
 import { promises as fs } from 'node:fs';
 import { resolve } from 'node:path';
 
-const tag =
+const rawTag =
   process.argv[2] ??
-  (process.env.GITHUB_REF_NAME ?? process.env.GITHUB_REF ?? '');
+  process.env.GITHUB_REF_NAME ??
+  process.env.GITHUB_REF ??
+  '';
+const tag = rawTag.replace(/^refs\/tags\//, '');
 const version = tag.startsWith('v') ? tag.slice(1) : tag;
 
 if (!version || version.includes('/')) {
