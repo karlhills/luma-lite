@@ -18,7 +18,6 @@ jobs:
       CI: true
       USE_SYSTEM_7ZA: true
       NODE_ENV: development
-      USE_SYSTEM_APP_BUILDER: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,7 +35,7 @@ jobs:
         run: npm install --no-save app-builder-bin@4.0.0
 
       - name: Verify app-builder
-        run: node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}"
+        run: node -e "const fs=require('fs'); process.env.USE_SYSTEM_APP_BUILDER='false'; const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}"
 
       - name: Expose app-builder on PATH
         if: runner.os != 'Windows'
@@ -60,6 +59,8 @@ jobs:
           echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
 
       - name: Build installers
+        env:
+          USE_SYSTEM_APP_BUILDER: true
         run: |
           npm run package
 
