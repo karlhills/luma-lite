@@ -30,12 +30,6 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Sync version from tag
-        run: node scripts/sync-version.mjs "${GITHUB_REF_NAME}"
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Enable system 7za (macOS/Linux)
         if: runner.os != 'Windows'
         run: echo "USE_SYSTEM_7ZA=true" >> "$GITHUB_ENV"
@@ -65,6 +59,9 @@ jobs:
       - name: Install 7zip (Windows)
         if: runner.os == 'Windows'
         run: choco install 7zip -y
+
+      - name: Sync version from tag
+        run: node scripts/sync-version.mjs "${GITHUB_REF_NAME}"
 
       - name: Build installers (electron-builder)
         uses: samuelmeuli/action-electron-builder@v1
