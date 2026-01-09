@@ -33,7 +33,9 @@ jobs:
         run: npm install --no-save 7zip-bin
 
       - name: Build installers
-        run: npm run package
+        run: |
+          node -e "console.log('7zip-bin version:', require('7zip-bin').version || 'unknown')"
+          npm run package
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
