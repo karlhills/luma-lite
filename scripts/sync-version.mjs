@@ -1,10 +1,12 @@
 import { promises as fs } from 'node:fs';
 import { resolve } from 'node:path';
 
-const tag = process.argv[2] ?? '';
+const tag =
+  process.argv[2] ??
+  (process.env.GITHUB_REF_NAME ?? process.env.GITHUB_REF ?? '');
 const version = tag.startsWith('v') ? tag.slice(1) : tag;
 
-if (!version) {
+if (!version || version.includes('/')) {
   console.error('Usage: node scripts/sync-version.mjs <tag>');
   process.exit(1);
 }
