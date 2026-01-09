@@ -18,6 +18,7 @@ jobs:
       CI: true
       USE_SYSTEM_7ZA: true
       NODE_ENV: development
+      USE_SYSTEM_APP_BUILDER: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,6 +37,12 @@ jobs:
 
       - name: Verify app-builder
         run: node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}"
+
+      - name: Expose app-builder on PATH
+        if: runner.os != 'Windows'
+        run: |
+          node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; fs.copyFileSync(p, 'app-builder'); fs.chmodSync('app-builder', 0o755)"
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
 
       - name: Install system 7zip (Linux)
         if: runner.os == 'Linux'
