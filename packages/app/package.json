@@ -1,6 +1,7 @@
 {
   "name": "@lumalite/app",
   "version": "0.1.0",
+  "author": "84boxes <support@84boxes.com>",
   "private": true,
   "type": "module",
   "main": "dist/main/index.js",
