@@ -38,6 +38,13 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install p7zip
 
+      - name: Expose 7za on PATH
+        if: runner.os != 'Windows'
+        run: |
+          cp "$(command -v 7za)" ./7za
+          chmod +x ./7za
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
       - name: Build installers
         run: |
           npm run package
