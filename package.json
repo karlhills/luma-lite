@@ -1,0 +1,62 @@
+{
+  "name": "lumalite",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run -w packages/app dev",
+    "build": "npm run -w packages/core build && npm run -w packages/app build",
+    "package": "npm run build && electron-builder",
+    "lint": "npm run -ws lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.84boxes.lumalite",
+    "productName": "LumaLite",
+    "directories": {
+      "app": "packages/app",
+      "buildResources": "packages/app/assets",
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "assets/**",
+      "package.json"
+    ],
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.lifestyle",
+      "target": [
+        "dmg"
+      ],
+      "icon": "lumalite_icon.icns"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "lumalite_icon_large.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "lumalite_icon_large.png"
+    }
+  }
+}
