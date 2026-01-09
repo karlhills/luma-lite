@@ -73,7 +73,7 @@ jobs:
           release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          USE_SYSTEM_APP_BUILDER: true
+          USE_SYSTEM_APP_BUILDER: ${{ runner.os != 'Windows' }}
           NODE_ENV: development
           NPM_CONFIG_PRODUCTION: false
           NPM_CONFIG_OMIT: ''
