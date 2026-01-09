@@ -10,8 +10,8 @@ const tag = rawTag.replace(/^refs\/tags\//, '');
 const version = tag.startsWith('v') ? tag.slice(1) : tag;
 
 if (!version || version.includes('/')) {
-  console.error('Usage: node scripts/sync-version.mjs <tag>');
-  process.exit(1);
+  console.log('No tag provided for version sync. Skipping.');
+  process.exit(0);
 }
 
 const targets = [
