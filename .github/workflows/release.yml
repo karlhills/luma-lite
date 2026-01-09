@@ -16,6 +16,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CI: true
+      NODE_ENV: development
+      NPM_CONFIG_PRODUCTION: false
+      NPM_CONFIG_OMIT: ''
+      NPM_CONFIG_INCLUDE: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,3 +67,15 @@ jobs:
         env:
           USE_SYSTEM_7ZA: true
           USE_SYSTEM_APP_BUILDER: true
+          NODE_ENV: development
+          NPM_CONFIG_PRODUCTION: false
+          NPM_CONFIG_OMIT: ''
+          NPM_CONFIG_INCLUDE: dev
+      - name: Upload action logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-builder-logs-${{ matrix.os }}
+          path: |
+            release/*.log
+            dist/**/*.log
