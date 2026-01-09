@@ -16,9 +16,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CI: true
-      USE_SYSTEM_7ZA: true
-      NODE_ENV: development
-      NPM_CONFIG_PRODUCTION: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,45 +27,15 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --include=optional --include=dev
+        run: npm ci
 
-      - name: Ensure async-exit-hook
-        run: npm install --no-save async-exit-hook
+      - name: Build packages
+        run: npm run build
 
-      - name: Ensure electron-builder binaries
-        run: npm install --no-save app-builder-bin@4.0.0
-
-      - name: Verify app-builder
-        run: node -e "const fs=require('fs'); process.env.USE_SYSTEM_APP_BUILDER='false'; const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}"
-
-      - name: Expose app-builder on PATH
-        if: runner.os != 'Windows'
-        run: |
-          node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; fs.copyFileSync(p, 'app-builder'); fs.chmodSync('app-builder', 0o755)"
-          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
-
-      - name: Install system 7zip (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y p7zip-full
-
-      - name: Install system 7zip (macOS)
-        if: runner.os == 'macOS'
-        run: brew install p7zip
-
-      - name: Expose 7za on PATH
-        if: runner.os != 'Windows'
-        run: |
-          cp "$(command -v 7za)" ./7za
-          chmod +x ./7za
-          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
-
-      - name: Build installers
-        env:
-          USE_SYSTEM_APP_BUILDER: true
-        run: |
-          npm run package
-
-      - name: Upload release assets
-        uses: softprops/action-gh-release@v2
+      - name: Build installers (electron-builder)
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          files: release/**
+          build_script_name: package
+          release: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
