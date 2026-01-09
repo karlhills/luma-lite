@@ -6,7 +6,7 @@ We support the latest release only. Please update to the most recent version bef
 
 ## Reporting a Vulnerability
 
-If you discover a security issue, please email: security@84boxes.com
+If you discover a security issue, please email: support@84boxes.com
 
 Please include:
 - A clear description of the issue

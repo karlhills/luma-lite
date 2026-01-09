@@ -34,7 +34,7 @@ This Code of Conduct applies within all project spaces, and it also applies when
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at: conduct@84boxes.com
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at: support@84boxes.com
 
 All complaints will be reviewed and investigated promptly and fairly.
 
