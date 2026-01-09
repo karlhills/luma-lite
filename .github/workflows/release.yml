@@ -32,6 +32,13 @@ jobs:
       - name: Build packages
         run: npm run build
 
+      - name: Ensure app-builder (macOS/Linux)
+        if: runner.os != 'Windows'
+        run: |
+          npm install --no-save app-builder-bin@4.0.0
+          node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}; fs.copyFileSync(p, 'app-builder'); fs.chmodSync('app-builder', 0o755)"
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
       - name: Install system 7zip (Linux)
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y p7zip-full
@@ -55,3 +62,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
           USE_SYSTEM_7ZA: true
+          USE_SYSTEM_APP_BUILDER: true
