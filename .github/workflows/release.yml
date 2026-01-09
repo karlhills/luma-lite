@@ -32,9 +32,26 @@ jobs:
       - name: Build packages
         run: npm run build
 
+      - name: Install system 7zip (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+
+      - name: Install system 7zip (macOS)
+        if: runner.os == 'macOS'
+        run: brew install p7zip
+
+      - name: Expose 7za on PATH
+        if: runner.os != 'Windows'
+        run: |
+          cp "$(command -v 7za)" ./7za
+          chmod +x ./7za
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
       - name: Build installers (electron-builder)
         uses: samuelmeuli/action-electron-builder@v1
         with:
           build_script_name: package
           release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          USE_SYSTEM_7ZA: true
