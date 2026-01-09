@@ -31,7 +31,9 @@ jobs:
         run: npm ci --include=optional
 
       - name: Ensure electron-builder binaries
-        run: npm rebuild app-builder-bin
+        run: |
+          npm rebuild app-builder-bin
+          node node_modules/app-builder-bin/install.js
 
       - name: Install system 7zip (Linux)
         if: runner.os == 'Linux'
