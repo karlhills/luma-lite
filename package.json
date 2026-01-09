@@ -55,11 +55,14 @@
       "icon": "lumalite_icon_large.png"
     },
     "linux": {
+      "category": "Utility",
+      "packageName": "lumalite",
       "target": [
         "AppImage",
         "deb"
       ],
-      "icon": "lumalite_icon_large.png"
+      "icon": "lumalite_icon_large.png",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     }
   }
 }
