@@ -17,6 +17,7 @@ jobs:
     env:
       CI: true
       USE_SYSTEM_7ZA: true
+      NODE_ENV: development
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,9 +32,10 @@ jobs:
         run: npm ci --include=optional
 
       - name: Ensure electron-builder binaries
-        run: |
-          npm rebuild app-builder-bin
-          node node_modules/app-builder-bin/install.js
+        run: npm install --no-save app-builder-bin@4.0.0
+
+      - name: Verify app-builder
+        run: node -e "const fs=require('fs'); const p=require('app-builder-bin').appBuilderPath; console.log('app-builder path', p); if(!fs.existsSync(p)) {console.error('missing app-builder'); process.exit(1)}"
 
       - name: Install system 7zip (Linux)
         if: runner.os == 'Linux'
