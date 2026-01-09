@@ -30,11 +30,11 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Sync version from tag
+        run: node scripts/sync-version.mjs "${GITHUB_REF_NAME}"
+
       - name: Install dependencies
         run: npm ci
-
-      - name: Build packages
-        run: npm run build
 
       - name: Enable system 7za (macOS/Linux)
         if: runner.os != 'Windows'
@@ -70,7 +70,7 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1
         with:
           build_script_name: package
-          release: true
+          release: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
           USE_SYSTEM_APP_BUILDER: ${{ runner.os != 'Windows' }}
@@ -78,6 +78,26 @@ jobs:
           NPM_CONFIG_PRODUCTION: false
           NPM_CONFIG_OMIT: ''
           NPM_CONFIG_INCLUDE: dev
+
+      - name: Publish macOS installers
+        if: runner.os == 'macOS'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.dmg
+
+      - name: Publish Windows installers
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.exe
+
+      - name: Publish Linux installers
+        if: runner.os == 'Linux'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.AppImage
+            release/*.deb
       - name: Upload action logs
         if: failure()
         uses: actions/upload-artifact@v4
