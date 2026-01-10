@@ -260,13 +260,9 @@ export const ControlDeckView = () => {
     const device = devices.find((item) => item.id === tile.target.deviceId);
     return (
       <div className="flex h-full flex-col justify-between">
-        <div className="flex items-center justify-between text-xs text-mist-400">
-          <span>Device</span>
-          <span className="text-mist-500">Quick toggle</span>
-        </div>
         <div>
-          <p className="text-sm font-semibold">{device?.name ?? tile.label}</p>
-          <p className="text-xs text-mist-500">{device?.model}</p>
+          <p className="text-sm font-semibold">{tile.label || device?.name}</p>
+          <p className="text-xs text-mist-500">On/Off</p>
         </div>
       </div>
     );
@@ -370,7 +366,7 @@ export const ControlDeckView = () => {
                   .filter((device) => rooms[device.id] === tile.target.roomName)
                   .every((device) => devicePower[device.id] ?? true)
               : tile.kind === 'device'
-                ? deviceStates[tile.target.deviceId]?.power ?? devicePower[tile.target.deviceId] ?? true
+                ? devicePower[tile.target.deviceId] ?? true
                 : false;
           const glow = isOn ? 'ring-1 ring-emerald-400/40' : '';
           return (

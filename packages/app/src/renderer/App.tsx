@@ -137,20 +137,21 @@ export const App = () => {
     return <SettingsView />;
   };
 
-  const viewLabel =
+  const viewMeta =
     activeView === 'favorites'
-      ? 'Favorites'
+      ? { label: 'Favorites', icon: Star }
       : activeView === 'scenes'
-        ? 'Scenes'
+        ? { label: 'Scenes', icon: Sparkles }
       : activeView === 'rooms'
-          ? 'Rooms'
+          ? { label: 'Rooms', icon: Home }
         : activeView === 'deck'
-          ? 'Control Deck'
+          ? { label: 'Control Deck', icon: LayoutGrid }
         : activeView === 'devices'
-          ? 'Devices'
+          ? { label: 'Devices', icon: MonitorSmartphone }
         : activeView === 'help'
-          ? 'Help'
-          : 'Settings';
+          ? { label: 'Help', icon: HelpCircle }
+          : { label: 'Settings', icon: SlidersHorizontal };
+  const ViewIcon = viewMeta.icon;
 
   return (
     <div className="relative flex h-screen overflow-hidden text-white">
@@ -226,8 +227,11 @@ export const App = () => {
       )}
       <main className="relative z-10 flex-1 overflow-y-auto p-6">
         <div className="drag-region flex items-center justify-between py-2">
-          <div>
-            <h2 className="-mt-1 font-display text-2xl font-semibold">{viewLabel}</h2>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-charcoal-800/70 p-2 text-mist-300">
+              <ViewIcon size={16} />
+            </span>
+            <h2 className="-mt-1 font-display text-2xl font-semibold">{viewMeta.label}</h2>
           </div>
           <div className="no-drag flex items-center gap-2">
             {activeView === 'devices' && (
