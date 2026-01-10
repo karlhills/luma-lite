@@ -106,6 +106,19 @@ Toggle Edit Deck to add/remove/reorder tiles. Layout and grid size are saved loc
 - Tray-first: the app starts hidden and lives in the menu bar.
 - Use Settings -> "Hide Dock icon" to hide/show the Dock icon immediately.
 
+## macOS Gatekeeper Warning (Unsigned Builds)
+
+If macOS says the app is “damaged” or refuses to open it, Gatekeeper is blocking an unsigned build. You can bypass it:
+
+1) Right-click the app → Open → Open.
+2) Or remove the quarantine flag:
+
+```
+xattr -dr com.apple.quarantine /Applications/LumaLite.app
+```
+
+Signed + notarized builds will not show this warning.
+
 ## Logs
 
 LumaLite writes logs to `lumalite.log` in the app `userData` directory. Use the Settings page to download a copy of the logs.
